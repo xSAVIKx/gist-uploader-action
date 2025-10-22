@@ -1,0 +1,38 @@
+name: Gist Uploader
+description: Performs uploads of files from a repository to GitHub Gist
+author: Yurii Serhiichuk
+
+branding:
+  icon: "upload"
+  color: "green"
+
+# Define your inputs here.
+inputs:
+  token:
+    required: true
+    description: "Personal access token for updating gist."
+  gist_id:
+    required: true
+    description: "ID of the gist to be updated."
+  gist_description:
+    required: false
+    description: "Description of the gist."
+  gist_file_name:
+    required: false
+    description: "File name in the gist."
+  file_path:
+    required: true
+    description: "Path of the file to be deployed."
+  file_type:
+    required: false
+    description: "File type of the file to be deployed."
+    default: "text"
+
+# Define your outputs here.
+outputs:
+  url:
+    description: The URL to the updated gist
+
+runs:
+  using: node24
+  main: dist/index.js
