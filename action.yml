@@ -23,10 +23,6 @@ inputs:
   file_path:
     required: true
     description: "Path of the file to be deployed."
-  file_type:
-    required: false
-    description: "File type of the file to be deployed."
-    default: "text"
 
 # Define your outputs here.
 outputs:

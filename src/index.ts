@@ -1,4 +1,4 @@
-import { getInput, setFailed, setOutput } from "@actions/core";
+import { getBooleanInput, getInput, setFailed, setOutput } from "@actions/core";
 import runAction from "./action.js";
 
 runAction({
@@ -7,7 +7,7 @@ runAction({
   gistDescription: getInput("gist_description", { trimWhitespace: true }),
   gistFileName: getInput("gist_file_name", { trimWhitespace: true }),
   filePath: getInput("file_path", { trimWhitespace: true }),
-  fileType: getInput("file_type", { trimWhitespace: true }),
+  isPublic: getBooleanInput("is_public") || false,
 })
   .then((output) => {
     setOutput("url", output.url);

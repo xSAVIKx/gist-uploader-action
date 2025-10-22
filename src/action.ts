@@ -1,3 +1,8 @@
+import { promises as fs } from "node:fs";
+import { basename, resolve } from "node:path";
+import { endGroup, info, startGroup } from "@actions/core";
+import { getOctokit } from "@actions/github";
+
 /**
  * Represents the structure of the input data.
  */
@@ -22,10 +27,11 @@ export type Input = {
    * Path of the file to be deployed.
    */
   filePath: string;
+
   /**
-   * File type of the file to be deployed.
+   * Whether the gist is public or not.
    */
-  fileType?: string;
+  isPublic: boolean;
 };
 
 /**
@@ -39,7 +45,50 @@ export type Output = {
 };
 
 export default async (options: Input): Promise<Output> => {
-  const url = "";
+  let { token, gistId, gistDescription, gistFileName, filePath, isPublic } = options;
+  const octokit = getOctokit(token);
+  const workspace = process.env.GITHUB_WORKSPACE ?? process.cwd();
+  filePath = resolve(workspace, filePath);
+
+  if (gistFileName === undefined) {
+    gistFileName = basename(filePath);
+  }
+
+  startGroup("Inputs");
+  if (gistId !== undefined) {
+    info(`[INFO] Gist Id: ${gistId}`);
+  } else {
+    info(`[INFO] Is Public: ${isPublic}`);
+  }
+  if (gistDescription !== undefined) {
+    info(`[INFO] Description: ${gistDescription}`);
+  }
+  info(`[INFO] File name: ${gistFileName}`);
+  info(`[INFO] File path: ${filePath}`);
+  endGroup();
+
+  startGroup("Deploy to gist");
+  const content = await fs.readFile(filePath, "utf-8");
+  if (gistId === undefined) {
+    const response = await octokit.rest.gists.create({
+      files: { [gistFileName]: { content } },
+      public: isPublic,
+    });
+    if (!response.data.id) {
+      throw new Error("Failed to create gist");
+    }
+    gistId = response.data.id;
+    info(`[INFO] Created gist "${gistId}"`);
+  } else {
+    await octokit.rest.gists.update({
+      gist_id: gistId,
+      files: { [gistFileName]: { content } },
+      description: gistDescription,
+    });
+    info(`[INFO] Updated gist "${gistId}"`);
+  }
+  endGroup();
+  const url = `https://gist.github.com/${gistId}`;
   return {
     url,
   };
