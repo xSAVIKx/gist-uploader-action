@@ -1,0 +1,28 @@
+name: Update Gist
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  update-gist:
+    runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.gist.outputs.url }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Update gist from file
+        id: gist
+        uses: xSAVIKx/gist-uploader-action@v0.1.0       # pin to a released version
+        with:
+          token: ${{ secrets.GIST_TOKEN }}
+          gist_id: eeb24ff793d2d47b4f2f023ba554aee4     # ID of the target gist
+          file_path: .github/workflows/update-gist.yml  # path in your repo to upload
+          # Optional inputs:
+          gist_description: "This gist is auto-updated using https://github.com/xSAVIKx/gist-uploader-action action"
+          gist_file_name: "update-gist.yml" # defaults to the basename of file_path
+
+      - name: Print gist URL
+        run: |
+          echo "Gist URL: ${{ steps.gist.outputs.url }}" >> $GITHUB_STEP_SUMMARY

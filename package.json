@@ -1,7 +1,7 @@
 {
   "name": "gist-uploader-action",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.1.1",
+  "description": "Performs uploads of repo files to gists\n\n",
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

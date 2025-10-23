@@ -28,11 +28,11 @@ jobs:
   update-gist:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Update gist from file
         id: gist
-        uses: your-org/gist-uploader-action@v0.1.0   # pin to a released version
+        uses: xSAVIKx/gist-uploader-action@v0.1.0   # pin to a released version
         with:
           token: ${{ secrets.GIST_TOKEN }}
           gist_id: 0123456789abcdef0123456789abcdef  # ID of the target gist
