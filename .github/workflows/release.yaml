@@ -11,6 +11,9 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      release_url: ${{ steps.release.outputs.url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -26,7 +29,8 @@ jobs:
         id: get_version
         shell: bash
         run: |
-          echo "version=$(bun --eval \"console.log(require('./package.json').version)\")" >> "$GITHUB_OUTPUT"
+          version=$( bun pm pkg get version | jq -r )
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
 
       - name: Check if git tag exists
         id: tag_check
@@ -72,9 +76,13 @@ jobs:
           git push origin "v${{ steps.get_version.outputs.version }}"
 
       - name: Create GitHub Release
+        id: release
         if: steps.tag_check.outputs.exists == 'false'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.get_version.outputs.version }}
           name: v${{ steps.get_version.outputs.version }}
           generate_release_notes: true
+          make_latest: true
+          files: |
+            dist/index.js
