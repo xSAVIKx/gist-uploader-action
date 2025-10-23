@@ -18,7 +18,7 @@ export type Input = {
   /**
    * Description of the gist.
    */
-  gistDescription?: string;
+  gistDescription: string;
   /**
    * File name in the gist.
    */
