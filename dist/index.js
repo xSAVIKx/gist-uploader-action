@@ -22751,13 +22751,14 @@ var action_default = async (options) => {
 };
 
 // src/index.ts
+var DEFAULT_DESCRIPTION = "Gist updated using https://github.com/xSAVIKx/gist-uploader-action action";
 action_default({
   token: import_core2.getInput("token", { trimWhitespace: true }),
   gistId: import_core2.getInput("gist_id", { trimWhitespace: true }),
-  gistDescription: import_core2.getInput("gist_description", { trimWhitespace: true }),
-  gistFileName: import_core2.getInput("gist_file_name", { trimWhitespace: true }),
+  gistDescription: import_core2.getInput("gist_description", { trimWhitespace: true, required: false }) || DEFAULT_DESCRIPTION,
+  gistFileName: import_core2.getInput("gist_file_name", { trimWhitespace: true, required: false }),
   filePath: import_core2.getInput("file_path", { trimWhitespace: true }),
-  isPublic: import_core2.getBooleanInput("is_public") || false
+  isPublic: import_core2.getBooleanInput("is_public", { trimWhitespace: true, required: false }) || false
 }).then((output) => {
   import_core2.setOutput("url", output.url);
   process.exit(0);
