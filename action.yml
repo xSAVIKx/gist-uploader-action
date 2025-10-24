@@ -23,6 +23,10 @@ inputs:
   file_path:
     required: true
     description: "Path of the file to be deployed."
+  is_public:
+    required: false
+    description: "Whether the gist should be public or private."
+    default: "false"
 
 # Define your outputs here.
 outputs:

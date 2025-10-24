@@ -16,7 +16,7 @@ jobs:
 
       - name: Update gist from file
         id: gist
-        uses: xSAVIKx/gist-uploader-action@v0.1.2       # pin to a released version
+        uses: xSAVIKx/gist-uploader-action@v0.1.3       # pin to a released version
         with:
           token: ${{ secrets.GIST_TOKEN }}
           gist_id: eeb24ff793d2d47b4f2f023ba554aee4     # ID of the target gist
